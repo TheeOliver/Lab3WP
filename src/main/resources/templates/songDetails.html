@@ -1,0 +1,55 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Song Details</title>
+    <style>
+        .review {
+            border: 1px solid black;
+            background: azure;
+            display: inline-block;
+            margin: 5px;
+            padding: 10px;
+            align-content: center;
+        }
+    </style>
+</head>
+<body>
+    <header>
+       <h1 th:text="${songTitle}"></h1>
+    </header>
+
+    <section>
+        <strong> Genre: </strong><th:block th:text="${genre}"></th:block><br>
+        <strong> Release Year: </strong><th:block th:text="${year}"></th:block><br>
+        <strong> Album: </strong><th:block th:text="${album}"></th:block>
+        <h2>Performers:</h2>
+        <ul th:each="artist : ${artists}">
+            <li th:text="${artist.getFirstName() + ' ' + artist.getLastName()}"></li>
+        </ul>
+    </section>
+    <form th:action="@{'/artist-form'}" th:method="POST" style="display: inline">
+        <input type="text" th:value="${trackId}" name="trackId" hidden="hidden">
+        <button type="submit">Add another Artist</button>
+    </form>
+    <form th:action="@{'/songs'}" th:method="GET" style="display: inline">
+        <button type="submit">View all songs</button>
+    </form>
+    <form th:action="@{'/review/add/{id}' (id=${songId})}" th:method="POST">
+        <h4>Add a review</h4>
+        <input type="text" placeholder="Enter a comment" name="comment">
+        <input type="text" placeholder="Rate out of 5" name="rating">
+        <button type="submit">Add Review</button>
+    </form>
+    <section>
+        <h2>Reviews:</h2>
+        <th:block th:each="review : ${reviews}">
+            <div class="review">
+                <div th:text="${review.getRating()} + '/5'" style="text-align: center"></div>
+                <div th:text="${review.getComment()}"></div>
+            </div>
+        </th:block>
+    </section>
+
+</body>
+</html>
